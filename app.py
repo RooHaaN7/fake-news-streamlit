@@ -1,3 +1,6 @@
+import streamlit as st
+from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification, pipeline
+import torch
 if st.button("🚀 Analyze"):
     if user_input.strip():
         result = pipe(user_input)[0]
