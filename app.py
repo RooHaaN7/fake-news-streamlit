@@ -30,6 +30,7 @@ if st.button("🚀 Analyze"):
 
         st.markdown(f"**🔖 Raw Label:** `{label}`")
         st.markdown(f"**📊 Confidence Score:** `{score:.2%}`")
+        st.info("ℹ️ Confidence above 60% is considered reliable.")
 
         if score < 0.6:
             st.warning(f"🧐 **Prediction:** {label_mapped} \n\n⚠️ Low confidence ({score:.2%}) — result may be unreliable.")
