@@ -44,7 +44,7 @@ if st.button("🚀 Analyze"):
         st.markdown(f"**📊 Confidence Score:** `{score:.2%}`")
 
        if score < 0.6:
-    st.warning(f"🧐 **Prediction:** {label_mapped} \n\n⚠️ Low confidence ({score:.2%}) — result may be unreliable.")
+         st.warning(f"🧐 **Prediction:** {label_mapped} \n\n⚠️ Low confidence ({score:.2%}) — result may be unreliable.")
         else:
             if label == "LABEL_1":
                 st.success(f"✅ This article looks **REAL** with {score:.2%} confidence.")
