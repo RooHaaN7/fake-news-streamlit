@@ -40,3 +40,4 @@ if st.button("🚀 Analyze"):
                 st.error(f"🚨 This article appears **FAKE** with {score:.2%} confidence.")
     else:
         st.info("💡 Please enter some text above to analyze.")
+        st.info("ℹ️ Confidence above 60% is considered reliable.")
