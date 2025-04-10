@@ -12,33 +12,43 @@ def load_model():
 pipe = load_model()
 
 # Streamlit UI
-st.title("📰 Fake News Detector")
-user_input = st.text_area("Enter News Article Text", height=200)
+# Streamlit UI
+st.markdown(
+    "<h2 style='color:#4CAF50;'>🔎 Check if a News Article is Real or Fake</h2>",
+    unsafe_allow_html=True,
+)
 
-if st.button("Check"):
+user_input = st.text_area("📝 Paste your news article text below:", height=200)
+
+st.markdown("---")
+
+if st.button("🚀 Analyze"):
     if user_input.strip():
         result = pipe(user_input)[0]
-        
-        # Map Hugging Face labels to readable ones
+
+        # Label map
         label_map = {
-            "LABEL_0": "FAKE",
-            "LABEL_1": "REAL"
+            "LABEL_0": "❌ FAKE",
+            "LABEL_1": "✅ REAL"
         }
 
         label = result["label"]
         score = result["score"]
         label_mapped = label_map.get(label, label)
 
-        st.write("⚙️ Raw model output:")
+        # UI results
+        st.markdown("### 🧠 Model Decision")
         st.json(result)
 
-        st.write(f"🧠 Raw Label: {label}")
-        st.write(f"📊 Confidence: {score:.2%}")
+        st.markdown(f"**🔖 Raw Label:** `{label}`")
+        st.markdown(f"**📊 Confidence Score:** `{score:.2%}`")
 
-        # Confidence threshold check
         if score < 0.6:
-            st.warning(f"🧐 Prediction: **{label_mapped}**, but confidence is low ({score:.2%})")
+            st.warning(f"🧐 **Prediction:** {label_mapped} \n\n⚠️ Low confidence ({score:.2%})")
         else:
-            st.success(f"✅ Prediction: **{label_mapped}** with confidence {score:.2%}")
+            if label == "LABEL_1":
+                st.success(f"✅ This article looks **REAL** with {score:.2%} confidence.")
+            else:
+                st.error(f"🚨 This article appears **FAKE** with {score:.2%} confidence.")
     else:
-        st.warning("Please enter some text.")
+        st.info("💡 Please enter some text above to analyze.")
