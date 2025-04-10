@@ -23,8 +23,8 @@ if st.button("Check"):
 
         # Map Hugging Face default labels to readable labels
         label_map = {
-            "LABEL_0": "FAKE",
-            "LABEL_1": "REAL"
+            "LABEL_0": "REAL",
+            "LABEL_1": "FAKE"
         }
         label = label_map.get(label, label)
 
