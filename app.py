@@ -1,11 +1,21 @@
 import streamlit as st
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification, pipeline
-import torch
+
+@st.cache_resource
+def load_model():
+    model = DistilBertForSequenceClassification.from_pretrained("rohanN07/fake-news")
+    tokenizer = DistilBertTokenizerFast.from_pretrained("rohanN07/fake-news")
+    return pipeline("text-classification", model=model, tokenizer=tokenizer)
+
+pipe = load_model()
+
+st.title("📰 Fake News Detector")
+user_input = st.text_area("📝 Paste your news article text below:", height=200)
+
 if st.button("🚀 Analyze"):
     if user_input.strip():
         result = pipe(user_input)[0]
 
-        # Label map
         label_map = {
             "LABEL_0": "❌ FAKE",
             "LABEL_1": "✅ REAL"
@@ -15,7 +25,6 @@ if st.button("🚀 Analyze"):
         score = result["score"]
         label_mapped = label_map.get(label, label)
 
-        # UI results
         st.markdown("### 🧠 Model Decision")
         st.json(result)
 
