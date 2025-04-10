@@ -2,7 +2,7 @@ import streamlit as st
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
 from transformers import pipeline
 
-# Load model from Hugging Face (replace with correct repo path)
+# Load model from Hugging Face
 @st.cache_resource
 def load_model():
     model = DistilBertForSequenceClassification.from_pretrained("rohanN07/fake-news")
@@ -20,6 +20,14 @@ if st.button("Check"):
         result = pipe(user_input)[0]
         label = result['label']
         score = result['score']
-        st.success(f"Prediction: **{label}** with confidence **{score:.2f}**")
+
+        # Map Hugging Face default labels to readable labels
+        label_map = {
+            "LABEL_0": "FAKE",
+            "LABEL_1": "REAL"
+        }
+        label = label_map.get(label, label)
+
+        st.success(f"Prediction: **{label}** with confidence **{score:.2%}**")
     else:
         st.warning("Please enter some text.")
