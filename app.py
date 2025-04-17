@@ -7,14 +7,23 @@ st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="ce
 # --- Theme Toggle ---
 theme = st.radio("Choose Theme", ["🌞 Light Mode", "🌙 Dark Mode"], horizontal=True, key="theme_toggle")
 
-# --- Full Page Theme CSS ---
+# Load model
+@st.cache_resource
+def load_model():
+    model = DistilBertForSequenceClassification.from_pretrained("rohanN07/fake-news")
+    tokenizer = DistilBertTokenizerFast.from_pretrained("rohanN07/fake-news")
+    return pipeline("text-classification", model=model, tokenizer=tokenizer)
+
+pipe = load_model()
+
+# --- Light Mode CSS ---
 light_mode_css = """
     <style>
         html, body, [data-testid="stAppViewContainer"] {
             background-color: #f8f9fa;
             color: #000000;
         }
-        [data-testid="stMarkdownContainer"], .stText, .stMarkdown, .css-10trblm {
+        .stText, .stMarkdown, .css-10trblm {
             color: #000000 !important;
         }
         [data-testid="stHeader"] {
@@ -54,22 +63,21 @@ light_mode_css = """
             margin-top: 3rem;
             font-size: 0.9rem;
         }
-        /* Light mode radio button label color */
-        .stRadio > label, .stRadio > div > label {
+        /* Light Mode radio button label color */
+        .stRadio label, .stRadio div label {
             color: #000000 !important;
         }
     </style>
 """
 
-
-
+# --- Dark Mode CSS ---
 dark_mode_css = """
     <style>
         html, body, [data-testid="stAppViewContainer"] {
             background-color: #0e1117;
             color: #ffffff;
         }
-        [data-testid="stMarkdownContainer"], .stText, .stMarkdown, .css-10trblm {
+        .stText, .stMarkdown, .css-10trblm {
             color: #ffffff !important;
         }
         [data-testid="stHeader"] {
@@ -109,26 +117,19 @@ dark_mode_css = """
             margin-top: 3rem;
             font-size: 0.9rem;
         }
-        /* Dark mode radio button label color */
-        .stRadio > label, .stRadio > div > label {
+        /* Dark Mode radio button label color */
+        .stRadio label, .stRadio div label {
             color: #ffffff !important;
         }
     </style>
 """
 
+# Apply the selected theme
+if theme == "🌞 Light Mode":
+    st.markdown(light_mode_css, unsafe_allow_html=True)
+else:
+    st.markdown(dark_mode_css, unsafe_allow_html=True)
 
-
-# Apply selected theme
-st.markdown(light_mode_css if theme == "🌞 Light Mode" else dark_mode_css, unsafe_allow_html=True)
-
-# --- Load model ---
-@st.cache_resource
-def load_model():
-    model = DistilBertForSequenceClassification.from_pretrained("rohanN07/fake-news")
-    tokenizer = DistilBertTokenizerFast.from_pretrained("rohanN07/fake-news")
-    return pipeline("text-classification", model=model, tokenizer=tokenizer)
-
-pipe = load_model()
 
 # --- Title ---
 st.markdown("<h1 style='text-align: center;'>🧠 Fake News Classifier</h1>", unsafe_allow_html=True)
@@ -143,7 +144,7 @@ with st.expander("📌 Try an Example"):
     st.code("NASA has confirmed the moon is indeed made of cheese after astronauts discovered dairy-rich samples on their latest mission.")
 
 # --- Analyze Button ---
-if st.button("Analyze Text", use_container_width=True):
+if st.button("🚀 Analyze Text", use_container_width=True):
     if user_input.strip():
         with st.spinner("Analyzing..."):
             result = pipe(user_input)[0]
