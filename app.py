@@ -1,6 +1,9 @@
 import streamlit as st
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification, pipeline
 
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+model = AutoModelForSequenceClassification.from_pretrained("bhadresh-savani/distilbert-base-uncased-fake-news")
+tokenizer = AutoTokenizer.from_pretrained("bhadresh-savani/distilbert-base-uncased-fake-news")
 # Page config
 st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="centered")
 
