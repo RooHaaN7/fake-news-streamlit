@@ -82,4 +82,6 @@ if st.button("🚀 Analyze Text", use_container_width=True):
             <p><strong>Confidence:</strong> <span class="{score_color}">{score:.2%}</span></p>
         """, unsafe_allow_html=True)
 
-        if score < 0.
+                if score < 0.6:
+            st.markdown("<p style='color: red;'>⚠️ Low confidence. The prediction might not be reliable.</p>", unsafe_allow_html=True)
+
