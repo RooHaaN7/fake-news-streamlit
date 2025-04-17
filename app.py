@@ -10,9 +10,16 @@ theme = st.radio("Choose Theme", ["🌞 Light Mode", "🌙 Dark Mode"], horizont
 # --- Full Page Theme CSS ---
 light_mode_css = """
     <style>
-        html, body, [data-testid="stApp"] {
+        html, body, [data-testid="stAppViewContainer"] {
             background-color: #f8f9fa;
             color: #000000;
+        }
+        [data-testid="stHeader"] {
+            background-color: transparent;
+        }
+        [data-testid="stSidebar"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
         }
         .stTextArea textarea {
             background-color: #ffffff !important;
@@ -20,9 +27,9 @@ light_mode_css = """
             border: 1px solid #ced4da;
         }
         .stButton > button {
-            background-color: #ffffff;
-            color: #000000;
-            border: 1px solid #ced4da;
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 1px solid #ced4da !important;
         }
         .result-card {
             background-color: #ffffff;
@@ -44,18 +51,21 @@ light_mode_css = """
             margin-top: 3rem;
             font-size: 0.9rem;
         }
-        section[data-testid="stSidebar"] {
-            background-color: #ffffff;
-            color: #000000;
-        }
     </style>
 """
 
 dark_mode_css = """
     <style>
-        html, body, [data-testid="stApp"] {
+        html, body, [data-testid="stAppViewContainer"] {
             background-color: #0e1117;
             color: #ffffff;
+        }
+        [data-testid="stHeader"] {
+            background-color: transparent;
+        }
+        [data-testid="stSidebar"] {
+            background-color: #1e1e1e !important;
+            color: #ffffff !important;
         }
         .stTextArea textarea {
             background-color: #1e1e1e !important;
@@ -63,9 +73,9 @@ dark_mode_css = """
             border: 1px solid #444444;
         }
         .stButton > button {
-            background-color: #222222;
-            color: #ffffff;
-            border: 1px solid #444444;
+            background-color: #222222 !important;
+            color: #ffffff !important;
+            border: 1px solid #444444 !important;
         }
         .result-card {
             background-color: #1e1e1e;
@@ -87,18 +97,11 @@ dark_mode_css = """
             margin-top: 3rem;
             font-size: 0.9rem;
         }
-        section[data-testid="stSidebar"] {
-            background-color: #1e1e1e;
-            color: #ffffff;
-        }
     </style>
 """
 
-# --- Apply selected theme ---
-if theme == "🌞 Light Mode":
-    st.markdown(light_mode_css, unsafe_allow_html=True)
-else:
-    st.markdown(dark_mode_css, unsafe_allow_html=True)
+# Apply selected theme
+st.markdown(light_mode_css if theme == "🌞 Light Mode" else dark_mode_css, unsafe_allow_html=True)
 
 # --- Load model ---
 @st.cache_resource
