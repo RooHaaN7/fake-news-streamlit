@@ -4,8 +4,7 @@ from transformers import pipeline, DistilBertForSequenceClassification, DistilBe
 # Page config
 st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="centered")
 # --- Theme Toggle ---
-theme = st.radio("Choose Theme", ["🌞 Light Mode", "🌙 Dark Mode"], horizontal=True)
-
+theme = st.radio("Choose Theme", ["🌞 Light Mode", "🌙 Dark Mode"], horizontal=True, key="theme_toggle")
 
 # Load model
 @st.cache_resource
