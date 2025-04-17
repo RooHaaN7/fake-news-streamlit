@@ -132,7 +132,6 @@ if theme == "🌞 Light Mode":
 else:
     st.markdown(dark_mode_css, unsafe_allow_html=True)
 
-
 # --- Title ---
 st.markdown("<h1 style='text-align: center;'>🧠 Fake News Classifier</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #6c757d;'>Instantly verify whether a news article is real or fake using DistilBERT</p>", unsafe_allow_html=True)
