@@ -63,6 +63,7 @@ light_mode_css = """
             margin-top: 3rem;
             font-size: 0.9rem;
         }
+        
         /* Light Mode radio button label color */
         .stRadio label, .stRadio div label {
             color: #000000 !important;
@@ -117,6 +118,7 @@ dark_mode_css = """
             margin-top: 3rem;
             font-size: 0.9rem;
         }
+        
         /* Dark Mode radio button label color */
         .stRadio label, .stRadio div label {
             color: #ffffff !important;
