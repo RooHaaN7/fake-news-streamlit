@@ -4,9 +4,6 @@ from transformers import pipeline, DistilBertForSequenceClassification, DistilBe
 # Page config
 st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="centered")
 
-# --- Theme Toggle ---
-theme = st.radio("Choose Theme", ["🌞 Light Mode", "🌙 Dark Mode"], horizontal=True, key="theme_toggle")
-
 # Load model
 @st.cache_resource
 def load_model():
@@ -16,7 +13,7 @@ def load_model():
 
 pipe = load_model()
 
-# --- Light Mode CSS ---
+# --- Light Mode CSS (Fixed) ---
 light_mode_css = """
     <style>
         html, body, [data-testid="stAppViewContainer"] {
@@ -66,61 +63,8 @@ light_mode_css = """
     </style>
 """
 
-# --- Dark Mode CSS ---
-dark_mode_css = """
-    <style>
-        html, body, [data-testid="stAppViewContainer"] {
-            background-color: #0e1117;
-            color: #ffffff;
-        }
-        .stText, .stMarkdown, .stTextArea textarea, .stButton > button, .stRadio label {
-            color: #ffffff !important;
-        }
-        [data-testid="stHeader"] {
-            background-color: transparent;
-        }
-        [data-testid="stSidebar"] {
-            background-color: #1e1e1e !important;
-            color: #ffffff !important;
-        }
-        .stTextArea textarea {
-            background-color: #1e1e1e !important;
-            color: #ffffff !important;
-            border: 1px solid #444444;
-        }
-        .stButton > button {
-            background-color: #222222 !important;
-            color: #ffffff !important;
-            border: 1px solid #444444 !important;
-        }
-        .result-card {
-            background-color: #1e1e1e;
-            color: #ffffff;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
-            margin-top: 1rem;
-        }
-        .confidence-high {
-            color: #00ff00;
-        }
-        .confidence-low {
-            color: #ff4b4b;
-        }
-        .footer {
-            text-align: center;
-            color: #aaaaaa;
-            margin-top: 3rem;
-            font-size: 0.9rem;
-        }
-    </style>
-"""
-
-# Apply the selected theme
-if theme == "🌞 Light Mode":
-    st.markdown(light_mode_css, unsafe_allow_html=True)
-else:
-    st.markdown(dark_mode_css, unsafe_allow_html=True)
+# Apply the light mode theme (since we're removing the toggle)
+st.markdown(light_mode_css, unsafe_allow_html=True)
 
 # --- Title ---
 st.markdown("<h1 style='text-align: center;'>🧠 Fake News Classifier</h1>", unsafe_allow_html=True)
