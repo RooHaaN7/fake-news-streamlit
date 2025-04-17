@@ -23,7 +23,7 @@ light_mode_css = """
             background-color: #f8f9fa;
             color: #000000;
         }
-        .stText, .stMarkdown, .css-10trblm {
+        .stText, .stMarkdown, .stTextArea textarea, .stButton > button, .stRadio label {
             color: #000000 !important;
         }
         [data-testid="stHeader"] {
@@ -63,11 +63,6 @@ light_mode_css = """
             margin-top: 3rem;
             font-size: 0.9rem;
         }
-        
-        /* Light Mode radio button label color */
-        .stRadio label, .stRadio div label {
-            color: #000000 !important;
-        }
     </style>
 """
 
@@ -78,7 +73,7 @@ dark_mode_css = """
             background-color: #0e1117;
             color: #ffffff;
         }
-        .stText, .stMarkdown, .css-10trblm {
+        .stText, .stMarkdown, .stTextArea textarea, .stButton > button, .stRadio label {
             color: #ffffff !important;
         }
         [data-testid="stHeader"] {
@@ -117,11 +112,6 @@ dark_mode_css = """
             color: #aaaaaa;
             margin-top: 3rem;
             font-size: 0.9rem;
-        }
-        
-        /* Dark Mode radio button label color */
-        .stRadio label, .stRadio div label {
-            color: #ffffff !important;
         }
     </style>
 """
