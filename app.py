@@ -6,6 +6,98 @@ st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="ce
 # --- Theme Toggle ---
 theme = st.radio("Choose Theme", ["🌞 Light Mode", "🌙 Dark Mode"], horizontal=True, key="theme_toggle")
 
+# --- Full Page Theme CSS ---
+light_mode_css = """
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #000000;
+        }
+        .stApp {
+            background-color: #f8f9fa;
+            color: #000000;
+        }
+        .stTextArea textarea {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 1px solid #ced4da;
+        }
+        .stButton > button {
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #ced4da;
+        }
+        .result-card {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 1rem;
+        }
+        .confidence-high {
+            color: green;
+        }
+        .confidence-low {
+            color: red;
+        }
+        .footer {
+            text-align: center;
+            color: gray;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+        .stSidebar {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+    </style>
+"""
+
+dark_mode_css = """
+    <style>
+        body {
+            background-color: #0e1117;
+            color: #ffffff;
+        }
+        .stApp {
+            background-color: #0e1117;
+            color: #ffffff;
+        }
+        .stTextArea textarea {
+            background-color: #1e1e1e !important;
+            color: #ffffff !important;
+            border: 1px solid #444444;
+        }
+        .stButton > button {
+            background-color: #222222;
+            color: #ffffff;
+            border: 1px solid #444444;
+        }
+        .result-card {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+            margin-top: 1rem;
+        }
+        .confidence-high {
+            color: #00ff00;
+        }
+        .confidence-low {
+            color: #ff4b4b;
+        }
+        .footer {
+            text-align: center;
+            color: #aaaaaa;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+        .stSidebar {
+            background-color: #1e1e1e !important;
+            color
+
 # Load model
 @st.cache_resource
 def load_model():
