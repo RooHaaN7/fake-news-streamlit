@@ -3,6 +3,9 @@ from transformers import pipeline, DistilBertForSequenceClassification, DistilBe
 
 # Page config
 st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="centered")
+# --- Theme Toggle ---
+theme = st.radio("Choose Theme", ["🌞 Light Mode", "🌙 Dark Mode"], horizontal=True)
+
 
 # Load model
 @st.cache_resource
@@ -13,38 +16,9 @@ def load_model():
 
 pipe = load_model()
 
-# --- Custom CSS ---
-st.markdown("""
-    <style>
-        .main {
-            background-color: #f8f9fa;
-        }
-        .stTextArea textarea {
-            background-color: #ffffff !important;
-            border: 1px solid #ced4da;
-            border-radius: 0.5rem;
-        }
-        .result-card {
-            background-color: #ffffff;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            margin-top: 1rem;
-        }
-        .confidence-high {
-            color: green;
-        }
-        .confidence-low {
-            color: red;
-        }
-        .footer {
-            text-align: center;
-            color: gray;
-            margin-top: 3rem;
-            font-size: 0.9rem;
-        }
-    </style>
-""", unsafe_allow_html=True)
+# --- Theme Toggle ---
+theme = st.radio("Choose Theme", ["🌞 Light Mode", "🌙 Dark Mode"], horizontal=True)
+
 
 # --- Title ---
 st.markdown("<h1 style='text-align: center;'>🧠 Fake News Classifier</h1>", unsafe_allow_html=True)
