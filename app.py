@@ -54,8 +54,13 @@ light_mode_css = """
             margin-top: 3rem;
             font-size: 0.9rem;
         }
+        /* Light mode radio button label color */
+        .stRadio > label, .stRadio > div > label {
+            color: #000000 !important;
+        }
     </style>
 """
+
 
 
 dark_mode_css = """
@@ -104,8 +109,13 @@ dark_mode_css = """
             margin-top: 3rem;
             font-size: 0.9rem;
         }
+        /* Dark mode radio button label color */
+        .stRadio > label, .stRadio > div > label {
+            color: #ffffff !important;
+        }
     </style>
 """
+
 
 
 # Apply selected theme
