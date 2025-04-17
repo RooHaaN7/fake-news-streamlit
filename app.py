@@ -13,7 +13,7 @@ def load_model():
 
 pipe = load_model()
 
-# --- Custom CSS for styling ---
+# --- Custom CSS ---
 st.markdown("""
     <style>
         .main {
@@ -50,18 +50,18 @@ st.markdown("""
 st.markdown("<h1 style='text-align: center;'>🧠 Fake News Classifier</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #6c757d;'>Instantly verify whether a news article is real or fake using DistilBERT</p>", unsafe_allow_html=True)
 
-# --- Input Container ---
-with st.container():
-    st.markdown("### 📝 Input Article")
-    user_input = st.text_area("Paste your news article below", height=200, label_visibility="collapsed")
+# --- Input Box ---
+st.markdown("### 📝 Enter a News Article or Statement")
+user_input = st.text_area("Paste the news article below", height=200, label_visibility="collapsed")
 
-    with st.expander("🔍 Need a test example?"):
-        st.code("NASA has confirmed the moon is indeed made of cheese after astronauts discovered dairy-rich samples on their latest mission.")
+# --- Example Text ---
+with st.expander("📌 Try an Example"):
+    st.code("NASA has confirmed the moon is indeed made of cheese after astronauts discovered dairy-rich samples on their latest mission.")
 
 # --- Analyze Button ---
 if st.button("🚀 Analyze Text", use_container_width=True):
     if user_input.strip():
-        with st.spinner("Processing with AI..."):
+        with st.spinner("Analyzing..."):
             result = pipe(user_input)[0]
 
         label_map = {
@@ -74,19 +74,35 @@ if st.button("🚀 Analyze Text", use_container_width=True):
         label_mapped = label_map.get(label, label)
         score_color = "confidence-high" if score >= 0.6 else "confidence-low"
 
-       # --- Result Display ---
-st.markdown(f"""
-<div class="result-card">
-    <h3>📢 Prediction Result</h3>
-    <p><strong>Label:</strong> {label_mapped}</p>
-    <p><strong>Confidence:</strong> <span class="{score_color}">{score:.2%}</span></p>
-</div>
-""", unsafe_allow_html=True)
+        # --- Result Card ---
+        result_html = f"""
+            <div class="result-card">
+                <h3>📢 Prediction Result</h3>
+                <p><strong>Label:</strong> {label_mapped}</p>
+                <p><strong>Confidence:</strong> <span class="{score_color}">{score:.2%}</span></p>
+            </div>
+        """
+        st.markdown(result_html, unsafe_allow_html=True)
 
-if score < 0.6:
-    st.markdown("<p style='color: red;'>⚠️ Low confidence. The prediction might not be reliable.</p>", unsafe_allow_html=True)
-elif label == "LABEL_1":
-    st.success(f"✅ This article appears REAL with {score:.2%} confidence.")
-else:
-    st.error(f"🚨 This article appears FAKE with {score:.2%} confidence.")
+        # --- Additional Feedback ---
+        if score < 0.6:
+            st.warning(f"⚠️ Low confidence prediction. Confidence: {score:.2%}")
+        elif label == "LABEL_1":
+            st.success(f"✅ This article appears REAL with {score:.2%} confidence.")
+        else:
+            st.error(f"🚨 This article appears FAKE with {score:.2%} confidence.")
 
+        # --- Expanders ---
+        with st.expander("🧬 Model Details"):
+            st.markdown("- Model: `rohanN07/fake-news`")
+            st.markdown("- Base: DistilBERT")
+            st.markdown("- Fine-tuned for binary classification (REAL vs FAKE)")
+
+        with st.expander("📘 Label Meaning"):
+            st.markdown("**✅ REAL**: Likely factual and reliable.")
+            st.markdown("**❌ FAKE**: Possibly misleading or incorrect.")
+    else:
+        st.warning("⚠️ Please enter some text to analyze.")
+
+# --- Footer ---
+st.markdown("<div class='footer'>🔗 Built with HuggingFace Transformers & Streamlit · © 2025</div>", unsafe_allow_html=True)
