@@ -74,14 +74,19 @@ if st.button("🚀 Analyze Text", use_container_width=True):
         label_mapped = label_map.get(label, label)
         score_color = "confidence-high" if score >= 0.6 else "confidence-low"
 
-        # --- Result Display ---
-        st.markdown(f"""
-        <div class="result-card">
-            <h3>📢 Prediction Result</h3>
-            <p><strong>Label:</strong> {label_mapped}</p>
-            <p><strong>Confidence:</strong> <span class="{score_color}">{score:.2%}</span></p>
-        """, unsafe_allow_html=True)
+       # --- Result Display ---
+st.markdown(f"""
+<div class="result-card">
+    <h3>📢 Prediction Result</h3>
+    <p><strong>Label:</strong> {label_mapped}</p>
+    <p><strong>Confidence:</strong> <span class="{score_color}">{score:.2%}</span></p>
+</div>
+""", unsafe_allow_html=True)
 
-                if score < 0.6:
-            st.markdown("<p style='color: red;'>⚠️ Low confidence. The prediction might not be reliable.</p>", unsafe_allow_html=True)
+if score < 0.6:
+    st.markdown("<p style='color: red;'>⚠️ Low confidence. The prediction might not be reliable.</p>", unsafe_allow_html=True)
+elif label == "LABEL_1":
+    st.success(f"✅ This article appears REAL with {score:.2%} confidence.")
+else:
+    st.error(f"🚨 This article appears FAKE with {score:.2%} confidence.")
 
