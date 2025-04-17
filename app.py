@@ -1,6 +1,5 @@
 import streamlit as st
 from transformers import pipeline, DistilBertForSequenceClassification, DistilBertTokenizerFast
-
 # Page config
 st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="centered")
 
