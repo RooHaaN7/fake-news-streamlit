@@ -15,10 +15,6 @@ def load_model():
 
 pipe = load_model()
 
-# --- Theme Toggle ---
-theme = st.radio("Choose Theme", ["🌞 Light Mode", "🌙 Dark Mode"], horizontal=True)
-
-
 # --- Title ---
 st.markdown("<h1 style='text-align: center;'>🧠 Fake News Classifier</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #6c757d;'>Instantly verify whether a news article is real or fake using DistilBERT</p>", unsafe_allow_html=True)
