@@ -122,7 +122,7 @@ with st.expander("📌 Try an Example"):
     st.code("NASA has confirmed the moon is indeed made of cheese after astronauts discovered dairy-rich samples on their latest mission.")
 
 # --- Analyze Button ---
-if st.button("🚀 Analyze Text", use_container_width=True):
+if st.button("Analyze Text", use_container_width=True):
     if user_input.strip():
         with st.spinner("Analyzing..."):
             result = pipe(user_input)[0]
