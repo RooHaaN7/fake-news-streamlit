@@ -14,6 +14,9 @@ light_mode_css = """
             background-color: #f8f9fa;
             color: #000000;
         }
+        [data-testid="stMarkdownContainer"], .stText, .stMarkdown, .css-10trblm {
+            color: #000000 !important;
+        }
         [data-testid="stHeader"] {
             background-color: transparent;
         }
@@ -54,11 +57,15 @@ light_mode_css = """
     </style>
 """
 
+
 dark_mode_css = """
     <style>
         html, body, [data-testid="stAppViewContainer"] {
             background-color: #0e1117;
             color: #ffffff;
+        }
+        [data-testid="stMarkdownContainer"], .stText, .stMarkdown, .css-10trblm {
+            color: #ffffff !important;
         }
         [data-testid="stHeader"] {
             background-color: transparent;
@@ -99,6 +106,7 @@ dark_mode_css = """
         }
     </style>
 """
+
 
 # Apply selected theme
 st.markdown(light_mode_css if theme == "🌞 Light Mode" else dark_mode_css, unsafe_allow_html=True)
