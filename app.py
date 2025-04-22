@@ -66,6 +66,26 @@ light_mode_css = """
 
 # Apply the light mode theme (since we're removing the toggle)
 st.markdown(light_mode_css, unsafe_allow_html=True)
+# --- Navbar ---
+navbar_html = """
+    <style>
+        .navbar {
+            background-color: #343a40;
+            padding: 1rem 2rem;
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+    <div class="navbar">
+        📰 Real and Fake News Detection
+    </div>
+"""
+st.markdown(navbar_html, unsafe_allow_html=True)
+
 
 # --- Title ---
 st.markdown("<h1 style='text-align: center;'>🧠 Fake News Classifier</h1>", unsafe_allow_html=True)
