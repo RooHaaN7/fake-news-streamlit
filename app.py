@@ -17,51 +17,52 @@ pipe = load_model()
 light_mode_css = """
     <style>
         html, body, [data-testid="stAppViewContainer"] {
-            background-color: #f8f9fa;
-            color: #000000;
+            background-color: #ffffff;
+            color: #212529;
         }
-        .stText, .stMarkdown, .stTextArea textarea, .stButton > button, .stRadio label {
-            color: #000000 !important;
+        .stMarkdown, .stText, .stTextArea textarea, .stButton > button, .stRadio label {
+            color: #212529 !important;
         }
         [data-testid="stHeader"] {
             background-color: transparent;
         }
         [data-testid="stSidebar"] {
             background-color: #ffffff !important;
-            color: #000000 !important;
+            color: #212529 !important;
         }
         .stTextArea textarea {
             background-color: #ffffff !important;
-            color: #000000 !important;
+            color: #212529 !important;
             border: 1px solid #ced4da;
         }
         .stButton > button {
-            background-color: #ffffff !important;
-            color: #000000 !important;
+            background-color: #f1f1f1 !important;
+            color: #212529 !important;
             border: 1px solid #ced4da !important;
         }
         .result-card {
             background-color: #ffffff;
-            color: #000000;
+            color: #212529;
             padding: 1.5rem;
             border-radius: 1rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             margin-top: 1rem;
         }
         .confidence-high {
-            color: green;
+            color: #198754; /* Bootstrap green */
         }
         .confidence-low {
-            color: red;
+            color: #dc3545; /* Bootstrap red */
         }
         .footer {
             text-align: center;
-            color: gray;
+            color: #6c757d;
             margin-top: 3rem;
             font-size: 0.9rem;
         }
     </style>
 """
+
 
 # Apply the light mode theme (since we're removing the toggle)
 st.markdown(light_mode_css, unsafe_allow_html=True)
