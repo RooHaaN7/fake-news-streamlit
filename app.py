@@ -4,10 +4,14 @@ import hashlib
 import json
 import os
 
-# ---------- Utility Functions ----------
+# --- Page config ---
+st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="centered")
+
+# --- Password hashing ---
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
+# --- User management ---
 def load_users():
     if not os.path.exists("users.json"):
         with open("users.json", "w") as f:
@@ -31,20 +35,84 @@ def register_user(username, password):
     save_users(users)
     return True
 
-# ---------- Session State ----------
+# --- Session setup ---
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 if "username" not in st.session_state:
     st.session_state.username = ""
 
-# ---------- Model Loader ----------
+# --- Load model ---
 @st.cache_resource
 def load_model():
     model = DistilBertForSequenceClassification.from_pretrained("rohanN07/fake-news")
     tokenizer = DistilBertTokenizerFast.from_pretrained("rohanN07/fake-news")
     return pipeline("text-classification", model=model, tokenizer=tokenizer)
 
-# ---------- Logged Out Interface ----------
+# --- Light Mode CSS ---
+light_mode_css = """
+    <style>
+        html, body, [data-testid="stAppViewContainer"] {
+            background-color: #ffffff;
+            color: #212529;
+        }
+        .stMarkdown, .stText, .stTextArea textarea, .stButton > button, .stRadio label {
+            color: #212529 !important;
+        }
+        [data-testid="stHeader"] {
+            background-color: transparent;
+        }
+        [data-testid="stSidebar"] {
+            background-color: #ffffff !important;
+            color: #212529 !important;
+        }
+        .stTextArea textarea {
+            background-color: #ffffff !important;
+            color: #212529 !important;
+            border: 1px solid #ced4da;
+        }
+        .stButton > button {
+            background-color: #f1f1f1 !important;
+            color: #212529 !important;
+            border: 1px solid #ced4da !important;
+        }
+        .result-card {
+            background-color: #ffffff;
+            color: #212529;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 1rem;
+        }
+        .confidence-high {
+            color: #198754;
+        }
+        .confidence-low {
+            color: #dc3545;
+        }
+        .footer {
+            text-align: center;
+            color: #6c757d;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+        .navbar {
+            background-color: #343a40;
+            padding: 1rem 2rem;
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+"""
+st.markdown(light_mode_css, unsafe_allow_html=True)
+
+# --- Navbar ---
+st.markdown('<div class="navbar">📰 Real and Fake News Detection</div>', unsafe_allow_html=True)
+
+# --- Login/Signup if not logged in ---
 if not st.session_state.logged_in:
     st.title("🔐 Login / Sign Up")
     auth_mode = st.radio("Choose an option", ["Login", "Sign Up"], horizontal=True)
@@ -69,14 +137,16 @@ if not st.session_state.logged_in:
             else:
                 st.error("⚠️ Username already exists. Try another.")
 
-# ---------- Logged In Interface ----------
+# --- Main App if logged in ---
 else:
     pipe = load_model()
-    
-    st.markdown(f"### 👋 Welcome, **{st.session_state.username}**")
-    st.markdown("Use the box below to classify a news article as real or fake.")
 
-    if st.button("🔓 Logout", use_container_width=True):
+    st.markdown(f"<h1 style='text-align: center;'>🧠 Fake News Classifier</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #6c757d;'>Instantly verify whether a news article is real or fake using DistilBERT</p>", unsafe_allow_html=True)
+
+    st.markdown(f"👋 Welcome, **{st.session_state.username}**", unsafe_allow_html=True)
+
+    if st.button("🔓 Logout"):
         st.session_state.logged_in = False
         st.session_state.username = ""
         st.experimental_rerun()
@@ -100,17 +170,33 @@ else:
             label = result["label"]
             score = result["score"]
             label_mapped = label_map.get(label, label)
-            score_color = "🟢" if score >= 0.6 else "🔴"
+            score_color = "confidence-high" if score >= 0.6 else "confidence-low"
 
-            st.markdown(f"### 📢 Prediction Result")
-            st.write(f"**Label:** {label_mapped}")
-            st.write(f"**Confidence:** {score_color} {score:.2%}")
+            result_html = f"""
+                <div class="result-card">
+                    <h3>📢 Prediction Result</h3>
+                    <p><strong>Label:</strong> {label_mapped}</p>
+                    <p><strong>Confidence:</strong> <span class="{score_color}">{score:.2%}</span></p>
+                </div>
+            """
+            st.markdown(result_html, unsafe_allow_html=True)
 
             if score < 0.6:
-                st.warning(f"⚠️ Low confidence prediction.")
+                st.warning(f"⚠️ Low confidence prediction. Confidence: {score:.2%}")
             elif label == "LABEL_1":
-                st.success(f"✅ This article appears REAL.")
+                st.success(f"✅ This article appears REAL with {score:.2%} confidence.")
             else:
-                st.error(f"🚨 This article appears FAKE.")
+                st.error(f"🚨 This article appears FAKE with {score:.2%} confidence.")
+
+            with st.expander("🧬 Model Details"):
+                st.markdown("- Model: `rohanN07/fake-news`")
+                st.markdown("- Base: DistilBERT")
+                st.markdown("- Fine-tuned for binary classification (REAL vs FAKE)")
+
+            with st.expander("📘 Label Meaning"):
+                st.markdown("**✅ REAL**: Likely factual and reliable.")
+                st.markdown("**❌ FAKE**: Possibly misleading or incorrect.")
         else:
             st.warning("⚠️ Please enter some text to analyze.")
+
+    st.markdown("<div class='footer'>🔗 Built with HuggingFace Transformers & Streamlit · © 2025</div>", unsafe_allow_html=True)
