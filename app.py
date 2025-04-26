@@ -4,8 +4,7 @@ import hashlib
 import json
 import os
 
-# ---------- Helper Functions ----------
-
+# ---------- Utility Functions ----------
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
@@ -22,14 +21,12 @@ def save_users(users):
 
 def authenticate(username, password):
     users = load_users()
-    if username in users and users[username] == hash_password(password):
-        return True
-    return False
+    return username in users and users[username] == hash_password(password)
 
 def register_user(username, password):
     users = load_users()
     if username in users:
-        return False  # User exists
+        return False
     users[username] = hash_password(password)
     save_users(users)
     return True
@@ -40,44 +37,49 @@ if "logged_in" not in st.session_state:
 if "username" not in st.session_state:
     st.session_state.username = ""
 
-# ---------- Login or Signup ----------
-st.title("🔐 Login / Sign Up")
+# ---------- Model Loader ----------
+@st.cache_resource
+def load_model():
+    model = DistilBertForSequenceClassification.from_pretrained("rohanN07/fake-news")
+    tokenizer = DistilBertTokenizerFast.from_pretrained("rohanN07/fake-news")
+    return pipeline("text-classification", model=model, tokenizer=tokenizer)
 
-auth_mode = st.radio("Choose an option", ["Login", "Sign Up"], horizontal=True)
+# ---------- Logged Out Interface ----------
+if not st.session_state.logged_in:
+    st.title("🔐 Login / Sign Up")
+    auth_mode = st.radio("Choose an option", ["Login", "Sign Up"], horizontal=True)
 
-if auth_mode == "Login":
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
-    if st.button("Login"):
-        if authenticate(username, password):
-            st.session_state.logged_in = True
-            st.session_state.username = username
-            st.success("✅ Login successful")
-            st.experimental_rerun()
-        else:
-            st.error("❌ Invalid credentials")
+    if auth_mode == "Login":
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.button("Login"):
+            if authenticate(username, password):
+                st.session_state.logged_in = True
+                st.session_state.username = username
+                st.success("✅ Login successful!")
+                st.experimental_rerun()
+            else:
+                st.error("❌ Invalid credentials")
+    else:
+        new_username = st.text_input("Choose a username")
+        new_password = st.text_input("Choose a password", type="password")
+        if st.button("Sign Up"):
+            if register_user(new_username, new_password):
+                st.success("🎉 Account created! Please log in.")
+            else:
+                st.error("⚠️ Username already exists. Try another.")
+
+# ---------- Logged In Interface ----------
 else:
-    new_username = st.text_input("Choose a username")
-    new_password = st.text_input("Choose a password", type="password")
-    if st.button("Sign Up"):
-        if register_user(new_username, new_password):
-            st.success("🎉 Account created! Please log in.")
-        else:
-            st.error("⚠️ Username already exists. Try a different one.")
-
-# ---------- After Login ----------
-if st.session_state.logged_in:
-
-    # Load model
-    @st.cache_resource
-    def load_model():
-        model = DistilBertForSequenceClassification.from_pretrained("rohanN07/fake-news")
-        tokenizer = DistilBertTokenizerFast.from_pretrained("rohanN07/fake-news")
-        return pipeline("text-classification", model=model, tokenizer=tokenizer)
-
     pipe = load_model()
-
+    
     st.markdown(f"### 👋 Welcome, **{st.session_state.username}**")
+    st.markdown("Use the box below to classify a news article as real or fake.")
+
+    if st.button("🔓 Logout", use_container_width=True):
+        st.session_state.logged_in = False
+        st.session_state.username = ""
+        st.experimental_rerun()
 
     st.markdown("### 📝 Enter a News Article or Statement")
     user_input = st.text_area("Paste the news article below", height=200, label_visibility="collapsed")
@@ -112,9 +114,3 @@ if st.session_state.logged_in:
                 st.error(f"🚨 This article appears FAKE.")
         else:
             st.warning("⚠️ Please enter some text to analyze.")
-
-    # Logout button
-    if st.button("🔓 Logout"):
-        st.session_state.logged_in = False
-        st.session_state.username = ""
-        st.experimental_rerun()
