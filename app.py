@@ -6,6 +6,19 @@ import os
 
 # --- Page config ---
 st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="centered")
+# --- Theme Switcher ---
+if "theme" not in st.session_state:
+    st.session_state.theme = "Light"
+
+theme_choice = st.radio(
+    "Choose Theme",
+    ["Light", "Dark"],
+    horizontal=True,
+    index=0 if st.session_state.theme == "Light" else 1,
+)
+
+st.session_state.theme = theme_choice
+
 
 # --- Password hashing ---
 def hash_password(password):
