@@ -17,6 +17,7 @@ theme_choice = st.radio(
     index=0 if st.session_state.theme == "Light" else 1,
 )
 
+
 st.session_state.theme = theme_choice
 
 
@@ -120,7 +121,70 @@ light_mode_css = """
         }
     </style>
 """
-st.markdown(light_mode_css, unsafe_allow_html=True)
+dark_mode_css = """
+    <style>
+        html, body, [data-testid="stAppViewContainer"] {
+            background-color: #121212;
+            color: #f1f1f1;
+        }
+        .stMarkdown, .stText, .stTextArea textarea, .stButton > button, .stRadio label {
+            color: #f1f1f1 !important;
+        }
+        [data-testid="stHeader"] {
+            background-color: transparent;
+        }
+        [data-testid="stSidebar"] {
+            background-color: #1f1f1f !important;
+            color: #f1f1f1 !important;
+        }
+        .stTextArea textarea {
+            background-color: #1f1f1f !important;
+            color: #f1f1f1 !important;
+            border: 1px solid #333;
+        }
+        .stButton > button {
+            background-color: #333 !important;
+            color: #f1f1f1 !important;
+            border: 1px solid #555 !important;
+        }
+        .result-card {
+            background-color: #1f1f1f;
+            color: #f1f1f1;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+            margin-top: 1rem;
+        }
+        .confidence-high {
+            color: #4caf50;
+        }
+        .confidence-low {
+            color: #ff5252;
+        }
+        .footer {
+            text-align: center;
+            color: #b0b0b0;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+        .navbar {
+            background-color: #343a40;
+            padding: 1rem 2rem;
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+"""
+
+if st.session_state.theme == "Light":
+    st.markdown(light_mode_css, unsafe_allow_html=True)
+else:
+    st.markdown(dark_mode_css, unsafe_allow_html=True)
+
 
 # --- Navbar ---
 st.markdown('<div class="navbar">📰 Real and Fake News Detection</div>', unsafe_allow_html=True)
