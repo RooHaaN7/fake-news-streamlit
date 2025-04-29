@@ -3,6 +3,11 @@ from transformers import pipeline, DistilBertForSequenceClassification, DistilBe
 import hashlib
 import json
 import os
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+tokenizer = AutoTokenizer.from_pretrained("rohanN07/fake-news")
+model = AutoModelForSequenceClassification.from_pretrained("rohanN07/fake-news")
+
 
 # --- Page config ---
 st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="centered")
