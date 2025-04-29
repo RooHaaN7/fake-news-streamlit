@@ -1,16 +1,12 @@
 import streamlit as st
-from transformers import pipeline, DistilBertForSequenceClassification, DistilBertTokenizerFast
+from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
 import hashlib
 import json
 import os
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-
-tokenizer = AutoTokenizer.from_pretrained("rohanN07/fake-news")
-model = AutoModelForSequenceClassification.from_pretrained("rohanN07/fake-news")
-
 
 # --- Page config ---
 st.set_page_config(page_title="Fake News Detector", page_icon="🧠", layout="centered")
+
 # --- Theme Switcher ---
 if "theme" not in st.session_state:
     st.session_state.theme = "Light"
@@ -21,10 +17,7 @@ theme_choice = st.radio(
     horizontal=True,
     index=0 if st.session_state.theme == "Light" else 1,
 )
-
-
 st.session_state.theme = theme_choice
-
 
 # --- Password hashing ---
 def hash_password(password):
@@ -63,138 +56,23 @@ if "username" not in st.session_state:
 # --- Load model ---
 @st.cache_resource
 def load_model():
-    model = DistilBertForSequenceClassification.from_pretrained("rohanN07/fake-news")
-    tokenizer = DistilBertTokenizerFast.from_pretrained("rohanN07/fake-news")
+    tokenizer = AutoTokenizer.from_pretrained("rohanN07/fake-news")
+    model = AutoModelForSequenceClassification.from_pretrained("rohanN07/fake-news")
     return pipeline("text-classification", model=model, tokenizer=tokenizer)
 
-# --- Light Mode CSS ---
-light_mode_css = """
-    <style>
-        html, body, [data-testid="stAppViewContainer"] {
-            background-color: #ffffff;
-            color: #212529;
-        }
-        .stMarkdown, .stText, .stTextArea textarea, .stButton > button, .stRadio label {
-            color: #212529 !important;
-        }
-        [data-testid="stHeader"] {
-            background-color: transparent;
-        }
-        [data-testid="stSidebar"] {
-            background-color: #ffffff !important;
-            color: #212529 !important;
-        }
-        .stTextArea textarea {
-            background-color: #ffffff !important;
-            color: #212529 !important;
-            border: 1px solid #ced4da;
-        }
-        .stButton > button {
-            background-color: #f1f1f1 !important;
-            color: #212529 !important;
-            border: 1px solid #ced4da !important;
-        }
-        .result-card {
-            background-color: #ffffff;
-            color: #212529;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            margin-top: 1rem;
-        }
-        .confidence-high {
-            color: #198754;
-        }
-        .confidence-low {
-            color: #dc3545;
-        }
-        .footer {
-            text-align: center;
-            color: #6c757d;
-            margin-top: 3rem;
-            font-size: 0.9rem;
-        }
-        .navbar {
-            background-color: #343a40;
-            padding: 1rem 2rem;
-            color: #ffffff;
-            font-size: 1.25rem;
-            font-weight: 600;
-            text-align: center;
-            border-radius: 0.5rem;
-            margin-bottom: 2rem;
-        }
-    </style>
-"""
-dark_mode_css = """
-    <style>
-        html, body, [data-testid="stAppViewContainer"] {
-            background-color: #121212;
-            color: #f1f1f1;
-        }
-        .stMarkdown, .stText, .stTextArea textarea, .stButton > button, .stRadio label {
-            color: #f1f1f1 !important;
-        }
-        [data-testid="stHeader"] {
-            background-color: transparent;
-        }
-        [data-testid="stSidebar"] {
-            background-color: #1f1f1f !important;
-            color: #f1f1f1 !important;
-        }
-        .stTextArea textarea {
-            background-color: #1f1f1f !important;
-            color: #f1f1f1 !important;
-            border: 1px solid #333;
-        }
-        .stButton > button {
-            background-color: #333 !important;
-            color: #f1f1f1 !important;
-            border: 1px solid #555 !important;
-        }
-        .result-card {
-            background-color: #1f1f1f;
-            color: #f1f1f1;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
-            margin-top: 1rem;
-        }
-        .confidence-high {
-            color: #4caf50;
-        }
-        .confidence-low {
-            color: #ff5252;
-        }
-        .footer {
-            text-align: center;
-            color: #b0b0b0;
-            margin-top: 3rem;
-            font-size: 0.9rem;
-        }
-        .navbar {
-            background-color: #343a40;
-            padding: 1rem 2rem;
-            color: #ffffff;
-            font-size: 1.25rem;
-            font-weight: 600;
-            text-align: center;
-            border-radius: 0.5rem;
-            margin-bottom: 2rem;
-        }
-    </style>
-"""
+# --- Light/Dark Mode CSS ---
+light_mode_css = """<style>...your existing light mode CSS here...</style>"""
+dark_mode_css = """<style>...your existing dark mode CSS here...</style>"""
 
 if st.session_state.theme == "Light":
     st.markdown(light_mode_css, unsafe_allow_html=True)
 else:
     st.markdown(dark_mode_css, unsafe_allow_html=True)
 
-
 # --- Navbar ---
 st.markdown('<div class="navbar">📰 Real and Fake News Detection</div>', unsafe_allow_html=True)
 
-# --- Login/Signup if not logged in ---
+# --- Login/Signup ---
 if not st.session_state.logged_in:
     st.title("🔐 Login / Sign Up")
     auth_mode = st.radio("Choose an option", ["Login", "Sign Up"], horizontal=True)
@@ -219,7 +97,7 @@ if not st.session_state.logged_in:
             else:
                 st.error("⚠️ Username already exists. Try another.")
 
-# --- Main App if logged in ---
+# --- Main App ---
 else:
     pipe = load_model()
 
